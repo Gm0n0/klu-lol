@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  username      String   @unique // 2-8 chars, regex validated in app
+  passwordHash  String
+  role          Role     @default(USER)
+  banned        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  profile       Profile?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Profile {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Content
+  displayName        String?
+  bio                String?  @db.Text
+  profilePictureUrl  String?
+  views              Int      @default(0)
+  verified           Boolean  @default(false)
+
+  // Visuals
+  backgroundColor    String   @default("#000000")
+  gradient           String?
+  backgroundImageUrl String?
+  videoBackgroundUrl String?
+  overlayOpacity     Float    @default(0.5)
+  accentColor        String   @default("#00FFFF") // KLU.LOL Cyan
+  textColor          String   @default("#FFFFFF")
+  fontFamily         String   @default("Inter")
+
+  // Music
+  musicUrl           String?
+  musicAutoplay      Boolean  @default(true)
+  musicLoop          Boolean  @default(true)
+  musicVolume        Float    @default(0.5)
+
+  // Effects
+  usernameEffect     String?  // e.g., "neon", "typing", "rainbow"
+  backgroundEffect   String?  // e.g., "snow", "particles"
+  cursorEffect       String?
+  customCursorUrl    String?
+
+  // Relations
+  socialLinks        SocialLink[]
+  customLinks        CustomLink[]
+  embeds             Embed[]
+}
+
+model SocialLink {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  platform  String
+  url       String
+  icon      String?
+  order     Int     @default(0)
+}
+
+model CustomLink {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title     String
+  url       String
+  icon      String?
+  order     Int     @default(0)
+}
+
+model Embed {
+  id        String  @id @default(cuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type      String  // "youtube", "spotify", "soundcloud"
+  url       String
+  order     Int     @default(0)
+}
