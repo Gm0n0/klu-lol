@@ -1,21 +1,18 @@
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default auth((req) => {
-  const isAuthPage = req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/signup");
-  const isDashboardPage = req.nextUrl.pathname.startsWith("/dashboard");
+export function middleware(request: NextRequest) {
+  const sessionToken = 
+    request.cookies.get('next-auth.session-token')?.value || 
+    request.cookies.get('__Secure-next-auth.session-token')?.value;
 
-  if (isDashboardPage && !req.auth) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  if (isAuthPage && req.auth) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  if (!sessionToken && request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: ['/dashboard/:path*'],
 };
