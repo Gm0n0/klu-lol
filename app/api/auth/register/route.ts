@@ -1,9 +1,7 @@
+export const dynamic = 'force-dynamic';
 import NextAuth from "next-auth";
 import { auth } from "@/lib/auth";
 
 const handler = NextAuth(auth);
 
 export { handler as GET, handler as POST };
-
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
