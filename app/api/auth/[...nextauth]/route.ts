@@ -1,12 +1,4 @@
-import { auth } from "@/lib/auth";
-import { type NextRequest } from "next/server";
-
-export async function GET(request: NextRequest, ctx: any) {
-  return auth(request as any, ctx);
-}
-
-export async function POST(request: NextRequest, ctx: any) {
-  return auth(request as any, ctx);
-}
-
+import { handlers } from "@/lib/auth";
+export const { GET, POST } = handlers;
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
