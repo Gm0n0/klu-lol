@@ -4,21 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3",
-    "next-auth": "5.0.0-beta.19",
     "@prisma/client": "^5.14.0",
     "bcrypt": "^5.1.1",
-    "zod": "^3.23.8",
-    "lucide-react": "^0.379.0",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.3.0"
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.378.0",
+    "next": "14.2.3",
+    "next-auth": "^4.24.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "tailwind-merge": "^2.3.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "typescript": "^5",
